@@ -11,7 +11,16 @@ var numRowUser      = sheetUser.getLastRow();
 var configTheaters  = getConfig(2);
 var configYoutube   = getConfig(3);
 var configLine      = getConfig(4);
-var configRowIndex  = getConfig(5);
+
+var configRowIndex = {};
+
+for(var i = numRowData; i >= 2; i-- ){
+
+    var key = sheetData.getRange(i, 1).getValue()
+
+    configRowIndex[key] = i;
+
+}
 
 var API_KEY_GOOGLE              = configYoutube.API.Key;
 var YOUTUBE_DATA_API_SEARCH_URL = configYoutube.API.Endpoint + API_KEY_GOOGLE;
@@ -23,31 +32,11 @@ var LINE_HEADERS                = {'Content-Type': 'application/json; charset=UT
 // For test
 function test(){
 
-    multicastTheaterNewMovie('hc1');
+    Logger.log( JSON.stringify(configRowIndex) );
 
 }
 
-//  --------------------------------------  DB & Crawler Functions --------------------------------------
-
-// To get movies' trailer data
-function getMovieTrailerData(title){
-
-    var response = UrlFetchApp.fetch(
-		YOUTUBE_DATA_API_SEARCH_URL + "&q=" + title + "+預告",
-		{ method: 'get' }
-    );
-
-    var responseJSON = JSON.parse(response.getContentText());
-
-    var returnJSON = {};
-
-    returnJSON['urlVideo']      = YOUTUBE_ENDPOINT + responseJSON.items[0].id.videoId;
-    returnJSON['description']   = responseJSON.items[0]['snippet']['Description'];
-    returnJSON['urlThumbnail']  = responseJSON.items[0]['snippet']['thumbnails']['high']['url'];
-
-    return returnJSON;
-
-}
+//  -------------------------------------- Others Functions --------------------------------------
 
 // To get config
 function getConfig(rowIndexConfig){
@@ -78,6 +67,8 @@ function getTimeString(){
     return timeString;
 
 }
+
+//  -------------------------------------- Crawler Functions --------------------------------------
 
 // To parse request response content to xml object
 function xmlPreprocess(xml){
@@ -113,229 +104,7 @@ function xmlPreprocess(xml){
 
 }
 
-// To set theater JSON
-function setTheaterJSON(theaterKey, theaterDataInput, trailerData){
-
-    var configTheater = configTheaters[theaterKey];
-
-    var theaterName         = configTheater.name;
-    var theaterAddress      = configTheater.address;
-    var theaterTel          = configTheater.tel;
-    var theaterLatitude     = configTheater.location.latitude;
-    var theaterLongitude    = configTheater.location.longitude
-
-    var commonColumnJSON = {
-        title: theaterName,
-        text: "地址：" + theaterAddress + "\n電話：" + theaterTel + "\n"
-    };
-
-    var theaterJSON = {
-        movieList: theaterDataInput.movies.list.sort(),
-        infoColumnJSON : {
-            title: commonColumnJSON.title,
-            text: commonColumnJSON.text,
-            actions: [
-                {
-                    type: "message",
-                    label: "查詢時刻表",
-                    text: "showtimes;" + theaterKey
-                },
-                {
-                    type: "message",
-                    label: "戲院位置",
-                    text: "location;" + theaterKey
-                },
-                {
-                    type: "message",
-                    label: "放映電影",
-                    text: "movies;" + theaterKey
-                }
-            ]
-        },
-        unsubscriptColumnJSON : {
-            title: commonColumnJSON.title,
-            text: commonColumnJSON.text,
-            actions: [
-                {
-                    type: "message",
-                    label: "取消訂閱",
-                    text: "unsubscript;"+theaterKey
-                }
-            ]
-        },
-        subscriptColumnJSON : {
-            title: commonColumnJSON.title,
-            text: commonColumnJSON.text,
-            actions: [
-                {
-                    type: "message",
-                    label: "訂閱",
-                    text: "subscript;"+theaterKey
-                }
-            ]
-        },
-        showtimesJSON : [],
-        moviesJSON : [
-            {
-                type:"text",
-                text: "【" + theaterName + "】\n-----今日放映電影-----"
-            },
-            {
-                type: "template",
-                altText: "今日放映電影1",
-                template: {
-                    type: "carousel",
-                    columns: []
-                }
-            },
-            {
-                type: "template",
-                altText: "今日放映電影2",
-                template: {
-                    type: "carousel",
-                    columns: []
-                }
-            }
-        ],
-        locationJSON:[
-            {
-                type: "location",
-                title:    theaterName,
-                address:  theaterAddress,
-                latitude: theaterLatitude,
-                longitude:theaterLongitude
-            }
-        ]
-    };
-
-    var showtimesMessageList = [];
-
-    for(var auditorim in theaterDataInput['auditorims']){
-
-        messageItem = {};
-        messageItem['type'] = 'text';
-        messageItem['text'] = "【" + theaterName + "】\n";
-        messageItem['text'] += "-----" + auditorim + "-----\n";
-
-        for(var index in theaterDataInput['auditorims'][auditorim]){
-
-            movieTitle = theaterDataInput['auditorims'][auditorim][index]['title'];
-            movieTime = theaterDataInput['auditorims'][auditorim][index]['time'];
-
-            messageItem['text'] += movieTime + "@" + movieTitle + "\n";
-
-        }
-
-        showtimesMessageList.push(messageItem);
-
-    }
-
-    if(showtimesMessageList.length > 5){
-
-        var messageListNew = [];
-
-        for(var i = 0; i < showtimesMessageList.length; i+=2){
-
-            var itemMessageListNew = {};
-
-            itemMessageListNew['type'] = "text";
-
-            if(i+1 < showtimesMessageList.length-1){
-
-                itemMessageListNew['text'] = showtimesMessageList[i]['text']  + "\n\n" + showtimesMessageList[i+1]['text'];
-
-            } else {
-
-                itemMessageListNew['text'] = showtimesMessageList[i]['text'];
-
-            }
-
-            messageListNew.push(itemMessageListNew);
-
-        }
-
-        showtimesMessageList = messageListNew;
-
-    }
-
-    theaterJSON.showtimesJSON = showtimesMessageList;
-
-    for(var i in theaterDataInput.movies.list){
-
-        var movieTitle = theaterDataInput.movies.list[i];
-
-        var movieTrailerData = trailerData[movieTitle];
-
-        var urlTrailer          = movieTrailerData['URL'];
-        var thumbnailsTrailer   = movieTrailerData['Thumbnails'];
-        var descriptionTrailer  = movieTrailerData['Description'];
-
-        var column = {
-                title: movieTitle,
-                thumbnailImageUrl: thumbnailsTrailer,
-                text: descriptionTrailer.substr(0, 60),
-                actions: [
-                    {
-                        type: "uri",
-                        label: "Youtube連結",
-                        uri: urlTrailer
-                    }
-                ]
-
-        };
-
-        theaterJSON.moviesJSON[1 + i%2].template.columns.push(column);
-
-    }
-
-    sheetData.getRange(configRowIndex[theaterKey], 2).setValue( JSON.stringify(theaterJSON) );
-
-}
-
-// To set theaters list JSON
-function setTheaterListJSON(){
-
-    var theaterListJSON = [
-        {
-            type: "template",
-            altText: "北部二輪電影院",
-            template: {
-                type: "carousel",
-                columns: []
-            }
-        },
-        {
-            type: "template",
-            altText: "中南部二輪電影院",
-            template: {
-                type: "carousel",
-                columns: []
-            }
-        },
-        {
-            type: "template",
-            altText: "中南部二輪電影院",
-            template: {
-                type: "carousel",
-                columns: []
-            }
-        }
-
-    ];
-
-    for(var theaterKey in configTheaters){
-
-        var configTheater = configTheaters[theaterKey];
-        var theaterJSON = getJSON(theaterKey);
-        var theaterZone = configTheater.zone;
-
-        theaterListJSON[theaterZone-1].template.columns.push(theaterJSON.infoColumnJSON);
-
-    }
-
-    sheetData.getRange(configRowIndex['theaterListJSON'], 2).setValue( JSON.stringify(theaterListJSON) );
-
-}
+//  -------------------------------------- DB Access Functions --------------------------------------
 
 // Set All JSON
 function setJSON() {
@@ -545,103 +314,7 @@ function setJSON() {
 
 }
 
-// To add a theaterKey to toPushTheaters array
-function removedToPushTheaters(theaterKey){
-
-    var arrayToPushTheaters = JSON.parse( sheetData.getRange(configRowIndex['toPushTheaters'], 2).getValue() );
-
-    if(arrayToPushTheaters.indexOf(theaterKey) > -1){
-
-        arrayToPushTheaters = arrayToPushTheaters.filter(function(value, index, subscriptionList){
-
-            return value !== theaterKey;
-
-        });
-
-        arrayToPushTheaters.sort();
-
-    }
-
-    sheetData.getRange(configRowIndex['toPushTheaters'], 2).setValue( JSON.stringify(arrayToPushTheaters) );
-
-}
-
-// To add a theaterKey to toPushTheaters array
-function addToPushTheaters(theaterKey){
-
-    var arrayToPushTheaters = JSON.parse( sheetData.getRange(configRowIndex['toPushTheaters'], 2).getValue() );
-
-    if(arrayToPushTheaters.indexOf(theaterKey) < 0){
-
-        arrayToPushTheaters.push(theaterKey);
-        arrayToPushTheaters.sort();
-
-        sheetData.getRange(configRowIndex['toPushTheaters'], 2).setValue( JSON.stringify(arrayToPushTheaters) );
-
-    }
-
-}
-
-// To get toPushTheaters array
-function getToPushTheaters(){
-
-    return JSON.parse( sheetData.getRange(configRowIndex['toPushTheaters'], 2).getValue() );
-
-}
-
-// To add a uid
-function addUser(uid){
-
-    // Check if given uid exist in user sheet
-
-    var ifExist = getUserRowIndex(uid) > 0 ? true : false;
-
-    if(!ifExist){
-
-        sheetUser.appendRow([uid, '{"subscriptions":[]}']);
-
-    }
-
-}
-
-// To get row index of given uid in user sheet
-function getUserRowIndex(uid){
-
-    var rowIndexUser = 0;
-
-    for(var i = 2; i < numRowUser+1; i++){
-
-        var v = sheetUser.getRange(i, 1).getValue();
-
-        if(v === uid){
-
-            rowIndexUser = i;
-
-            break;
-
-        }
-
-    }
-
-    return rowIndexUser;
-
-}
-
-// To clear blank row in user sheet
-function clearUserSheet(){
-
-    for(var i = numRowUser; i > 2; i--){
-
-        var v = sheetUser.getRange(i, 1).getValue();
-
-        if(v == ""){
-
-            deleteRow(i);
-
-        }
-
-    }
-}
+// ---------------- Subscription ----------------
 
 // To add the theaterKey to the subscription array of given uid
 function addSubscription(uid, theaterKey){
@@ -720,12 +393,361 @@ function getSubscriptUserList(theaterKey){
 
 }
 
+// ---------------- Movies ----------------
+
+// To get movies' trailer data
+function getMovieTrailerData(title){
+
+    var response = UrlFetchApp.fetch(
+		YOUTUBE_DATA_API_SEARCH_URL + "&q=" + title + "+預告",
+		{ method: 'get' }
+    );
+
+    var responseJSON = JSON.parse(response.getContentText());
+
+    var returnJSON = {};
+
+    returnJSON['urlVideo']      = YOUTUBE_ENDPOINT + responseJSON.items[0].id.videoId;
+    returnJSON['description']   = responseJSON.items[0]['snippet']['Description'];
+    returnJSON['urlThumbnail']  = responseJSON.items[0]['snippet']['thumbnails']['high']['url'];
+
+    return returnJSON;
+
+}
+
+// ---------------- Theater ----------------
+
+// To set theater JSON
+function setTheaterJSON(theaterKey, theaterDataInput, trailerData){
+
+    var configTheater = configTheaters[theaterKey];
+
+    var theaterName         = configTheater.name;
+    var theaterAddress      = configTheater.address;
+    var theaterTel          = configTheater.tel;
+    var theaterLatitude     = configTheater.location.latitude;
+    var theaterLongitude    = configTheater.location.longitude
+
+    var commonColumnJSON = {
+        title: theaterName,
+        text: "地址：" + theaterAddress + "\n電話：" + theaterTel + "\n"
+    };
+
+    var theaterJSON = {
+        movieList: theaterDataInput.movies.list.sort(),
+        infoColumnJSON : {
+            title: commonColumnJSON.title,
+            text: commonColumnJSON.text,
+            actions: [
+                {
+                    type: "message",
+                    label: "查詢時刻表",
+                    text: "showtimes;" + theaterKey
+                },
+                {
+                    type: "message",
+                    label: "戲院位置",
+                    text: "location;" + theaterKey
+                },
+                {
+                    type: "message",
+                    label: "放映電影",
+                    text: "movies;" + theaterKey
+                }
+            ]
+        },
+        unsubscriptColumnJSON : {
+            title: commonColumnJSON.title,
+            text: commonColumnJSON.text,
+            actions: [
+                {
+                    type: "message",
+                    label: "取消訂閱",
+                    text: "unsubscript;"+theaterKey
+                }
+            ]
+        },
+        subscriptColumnJSON : {
+            title: commonColumnJSON.title,
+            text: commonColumnJSON.text,
+            actions: [
+                {
+                    type: "message",
+                    label: "訂閱",
+                    text: "subscript;"+theaterKey
+                }
+            ]
+        },
+        showtimesJSON : [],
+        moviesJSON : [
+            {
+                type:"text",
+                text: "【" + theaterName + "】\n-----今日放映電影-----"
+            },
+            {
+                type: "template",
+                altText: "今日放映電影1",
+                template: {
+                    type: "carousel",
+                    columns: []
+                }
+            },
+            {
+                type: "template",
+                altText: "今日放映電影2",
+                template: {
+                    type: "carousel",
+                    columns: []
+                }
+            }
+        ],
+        locationJSON:[
+            {
+                type: "location",
+                title:    theaterName,
+                address:  theaterAddress,
+                latitude: theaterLatitude,
+                longitude:theaterLongitude
+            }
+        ]
+    };
+
+    var showtimesMessageList = [];
+
+    for(var auditorim in theaterDataInput['auditorims']){
+
+        messageItem = {};
+        messageItem['type'] = 'text';
+        messageItem['text'] = "【" + theaterName + "】\n";
+        messageItem['text'] += "-----" + auditorim + "-----\n";
+
+        for(var index in theaterDataInput['auditorims'][auditorim]){
+
+            movieTitle = theaterDataInput['auditorims'][auditorim][index]['title'];
+            movieTime = theaterDataInput['auditorims'][auditorim][index]['time'];
+
+            messageItem['text'] += movieTime + "@" + movieTitle + "\n";
+
+        }
+
+        showtimesMessageList.push(messageItem);
+
+    }
+
+    if(showtimesMessageList.length > 5){
+
+        var messageListNew = [];
+
+        for(var i = 0; i < showtimesMessageList.length; i+=2){
+
+            var itemMessageListNew = {};
+
+            itemMessageListNew['type'] = "text";
+
+            if(i+1 < showtimesMessageList.length-1){
+
+                itemMessageListNew['text'] = showtimesMessageList[i]['text']  + "\n\n" + showtimesMessageList[i+1]['text'];
+
+            } else {
+
+                itemMessageListNew['text'] = showtimesMessageList[i]['text'];
+
+            }
+
+            messageListNew.push(itemMessageListNew);
+
+        }
+
+        showtimesMessageList = messageListNew;
+
+    }
+
+    theaterJSON.showtimesJSON = showtimesMessageList;
+
+    for(var i in theaterDataInput.movies.list){
+
+        var movieTitle = theaterDataInput.movies.list[i];
+
+        var movieTrailerData = trailerData[movieTitle];
+
+        var urlTrailer          = movieTrailerData['URL'];
+        var thumbnailsTrailer   = movieTrailerData['Thumbnails'];
+        var descriptionTrailer  = movieTrailerData['Description'];
+
+        var column = {
+                title: movieTitle,
+                thumbnailImageUrl: thumbnailsTrailer,
+                text: descriptionTrailer.substr(0, 60),
+                actions: [
+                    {
+                        type: "uri",
+                        label: "Youtube連結",
+                        uri: urlTrailer
+                    }
+                ]
+
+        };
+
+        theaterJSON.moviesJSON[1 + i%2].template.columns.push(column);
+
+    }
+
+    sheetData.getRange(configRowIndex[theaterKey], 2).setValue( JSON.stringify(theaterJSON) );
+
+}
+
+// To set theater list json
+function setTheaterListJSON(){
+
+    var theaterListJSON = [
+        {
+            type: "template",
+            altText: "北部二輪電影院",
+            template: {
+                type: "carousel",
+                columns: []
+            }
+        },
+        {
+            type: "template",
+            altText: "中南部二輪電影院",
+            template: {
+                type: "carousel",
+                columns: []
+            }
+        },
+        {
+            type: "template",
+            altText: "中南部二輪電影院",
+            template: {
+                type: "carousel",
+                columns: []
+            }
+        }
+
+    ];
+
+    for(var theaterKey in configTheaters){
+
+        var configTheater = configTheaters[theaterKey];
+        var theaterJSON = getJSON(theaterKey);
+        var theaterZone = configTheater.zone;
+
+        theaterListJSON[theaterZone-1].template.columns.push(theaterJSON.infoColumnJSON);
+
+    }
+
+    sheetData.getRange(configRowIndex['theaterListJSON'], 2).setValue( JSON.stringify(theaterListJSON) );
+
+}
+
+// To add a theaterKey to toPushTheaters array
+function removedToPushTheaters(theaterKey){
+
+    var arrayToPushTheaters = JSON.parse( sheetData.getRange(configRowIndex['toPushTheaters'], 2).getValue() );
+
+    if(arrayToPushTheaters.indexOf(theaterKey) > -1){
+
+        arrayToPushTheaters = arrayToPushTheaters.filter(function(value, index, subscriptionList){
+
+            return value !== theaterKey;
+
+        });
+
+        arrayToPushTheaters.sort();
+
+    }
+
+    sheetData.getRange(configRowIndex['toPushTheaters'], 2).setValue( JSON.stringify(arrayToPushTheaters) );
+
+}
+
+// To add a theaterKey to toPushTheaters array
+function addToPushTheaters(theaterKey){
+
+    var arrayToPushTheaters = JSON.parse( sheetData.getRange(configRowIndex['toPushTheaters'], 2).getValue() );
+
+    if(arrayToPushTheaters.indexOf(theaterKey) < 0){
+
+        arrayToPushTheaters.push(theaterKey);
+        arrayToPushTheaters.sort();
+
+        sheetData.getRange(configRowIndex['toPushTheaters'], 2).setValue( JSON.stringify(arrayToPushTheaters) );
+
+    }
+
+}
+
+// To get toPushTheaters array
+function getToPushTheaters(){
+
+    return JSON.parse( sheetData.getRange(configRowIndex['toPushTheaters'], 2).getValue() );
+
+}
+
+// ---------------- User ----------------
+
+// To add a uid
+function addUser(uid){
+
+    // Check if given uid exist in user sheet
+
+    var ifExist = getUserRowIndex(uid) > 0 ? true : false;
+
+    if(!ifExist){
+
+        sheetUser.appendRow([uid, '[]']);
+
+    }
+
+}
+
+// To get row index of given uid in user sheet
+function getUserRowIndex(uid){
+
+    var rowIndexUser = 0;
+
+    for(var i = 2; i < numRowUser+1; i++){
+
+        var v = sheetUser.getRange(i, 1).getValue();
+
+        if(v === uid){
+
+            rowIndexUser = i;
+
+            break;
+
+        }
+
+    }
+
+    return rowIndexUser;
+
+}
+
+// To clear blank row in user sheet
+function clearUserSheet(){
+
+    for(var i = numRowUser; i > 2; i--){
+
+        var v = sheetUser.getRange(i, 1).getValue();
+
+        if(v == ""){
+
+            deleteRow(i);
+
+        }
+
+    }
+}
+
 // To get theater data
 function getJSON(key){
 
     return JSON.parse( sheetData.getRange(configRowIndex[key], 2).getValue() );
 
 }
+
 //  -------------------------------------- LINE Bot Webhook Functions --------------------------------------
 
 // Webhook main function
@@ -751,14 +773,11 @@ function doPost(e) {
 
                 case 'subscriptions':
 
-                    // Reply user subscriptions
                     replySubscriptions(replyToken, uid);
 
                     break;
 
                 case 'unsubscript':
-
-                    // Unsubscript given theater of given uid
 
                     var theaterKey = arguments[1];
                     var theaterName = configTheaters[theaterKey].name;
@@ -770,8 +789,6 @@ function doPost(e) {
                     break;
 
                 case 'subscript':
-
-                    // Subscript given theater of given uid
 
                     var theaterKey = arguments[1];
                     var theaterName = configTheaters[theaterKey].name;
