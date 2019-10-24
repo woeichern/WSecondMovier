@@ -10,7 +10,7 @@
 
 資料庫共有個Sheet/Table, 分別是user、data、config。
 
- + #### user
+#### + user
 <table>
   <tr>
      <th>uid</th>
@@ -22,7 +22,7 @@
   </tr>
 </table>
 
- + #### data
+#### + data
 <table>
   <tr>
      <th>field</th>
