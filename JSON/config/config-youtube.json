@@ -1,0 +1,7 @@
+{
+  "Endpoint": "https://www.youtube.com/watch?v=",
+  "API": {
+    "Endpoint": "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoCaption=any&maxResults=1&key=",
+    "Key": "{YOUR_GOOGLE_API_KEY}"
+  }
+}
