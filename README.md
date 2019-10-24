@@ -12,5 +12,5 @@
 
 ## 串接API
 
-(Google Youtube Data API) [https://developers.google.com/youtube/v3]
-(LINE Messagine API) [https://developers.line.biz/en/reference/messaging-api/]
+[Google Youtube Data API] (https://developers.google.com/youtube/v3)
+[LINE Messagine API] (https://developers.line.biz/en/reference/messaging-api/)
