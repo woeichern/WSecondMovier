@@ -28,14 +28,6 @@ var YOUTUBE_ENDPOINT            = configYoutube.Endpoint;
 var LINE_CHANNEL_ACCESS_TOKEN   = configLine.ChannelAccessToken;
 var LINE_HEADERS                = {'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ' + LINE_CHANNEL_ACCESS_TOKEN,};
 
-
-// For test
-function test(){
-
-    Logger.log( JSON.stringify(configRowIndex) );
-
-}
-
 //  -------------------------------------- Others Functions --------------------------------------
 
 // To get config
