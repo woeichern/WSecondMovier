@@ -1,0 +1,18 @@
+{
+  "hc1": {
+    "name": "新復珍戲院",
+    "rowRecord": 2,
+    "atmoviesURL": "http://www.atmovies.com.tw/showtime/t03521/a35/",
+    "auditorims": [
+      "一廳",
+      "二廳"
+    ],
+    "address": "新竹市北區北門街6號",
+    "location": {
+      "latitude": 24.804893,
+      "longitude": 120.966184
+    },
+    "tel": "(03)524-8285",
+    "zone": 2
+  }
+}
