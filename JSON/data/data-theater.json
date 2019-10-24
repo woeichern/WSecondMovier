@@ -1,0 +1,155 @@
+{
+  "movieList": [
+    "名偵探柯南：紺青之拳",
+    "獅子王",
+    "玩具總動員4",
+    "蜘蛛人：離家日",
+    "電流大戰"
+  ],
+  "infoColumnJSON": {
+    "title": "新復珍戲院",
+    "text": "地址：新竹市北區北門街6號\n電話：(03)524-8285\n",
+    "actions": [
+      {
+        "type": "message",
+        "label": "查詢時刻表",
+        "text": "showtimes;hc1"
+      },
+      {
+        "type": "message",
+        "label": "戲院位置",
+        "text": "location;hc1"
+      },
+      {
+        "type": "message",
+        "label": "放映電影",
+        "text": "movies;hc1"
+      }
+    ]
+  },
+  "unsubscriptColumnJSON": {
+    "title": "新復珍戲院",
+    "text": "地址：新竹市北區北門街6號\n電話：(03)524-8285\n",
+    "actions": [
+      {
+        "type": "message",
+        "label": "取消訂閱",
+        "text": "unsubscript;hc1"
+      }
+    ]
+  },
+  "subscriptColumnJSON": {
+    "title": "新復珍戲院",
+    "text": "地址：新竹市北區北門街6號\n電話：(03)524-8285\n",
+    "actions": [
+      {
+        "type": "message",
+        "label": "訂閱",
+        "text": "subscript;hc1"
+      }
+    ]
+  },
+  "showtimesJSON": [
+    {
+      "type": "text",
+      "text": "【新復珍戲院】\n-----一廳-----\n10：20@獅子王\n12：20@名偵探柯南：紺青之拳\n14：10@獅子王\n16：10@名偵探柯南：紺青之拳\n18：00@獅子王\n20：00@名偵探柯南：紺青之拳\n21：50@獅子王\n23：50@名偵探柯南：紺青之拳\n"
+    },
+    {
+      "type": "text",
+      "text": "【新復珍戲院】\n-----二廳-----\n10：20@電流大戰\n12：10@玩具總動員4\n13：55@蜘蛛人：離家日\n16：05@電流大戰\n17：55@玩具總動員4\n19：40@蜘蛛人：離家日\n21：50@電流大戰\n23：40@蜘蛛人：離家日\n"
+    }
+  ],
+  "moviesJSON": [
+    {
+      "type": "text",
+      "text": "【新復珍戲院】\n-----今日放映電影-----"
+    },
+    {
+      "type": "template",
+      "altText": "今日放映電影1",
+      "template": {
+        "type": "carousel",
+        "columns": [
+          {
+            "title": "名偵探柯南：紺青之拳",
+            "thumbnailImageUrl": "https://i.ytimg.com/vi/pyaJVNd3Ons/hqdefault.jpg",
+            "text": "改編自日本漫畫家青山剛昌推理漫畫系列，名偵探柯南於平成時代所上映的最後一部劇場版【名偵探柯南23：紺青之拳】Detect",
+            "actions": [
+              {
+                "type": "uri",
+                "label": "Youtube連結",
+                "uri": "https://www.youtube.com/watch?v=pyaJVNd3Ons"
+              }
+            ]
+          },
+          {
+            "title": "玩具總動員4",
+            "thumbnailImageUrl": "https://i.ytimg.com/vi/RA-11WlGGkE/hqdefault.jpg",
+            "text": "迪士尼影業粉絲頁: https:/www.facebook.com/disneymoviesTaiwan 迪士尼影業官方",
+            "actions": [
+              {
+                "type": "uri",
+                "label": "Youtube連結",
+                "uri": "https://www.youtube.com/watch?v=RA-11WlGGkE"
+              }
+            ]
+          },
+          {
+            "title": "電流大戰",
+            "thumbnailImageUrl": "https://i.ytimg.com/vi/KF8vFnhEHzE/hqdefault.jpg",
+            "text": "官網：http://theatrical.catchplay.com/Movies/thecurrentwar 臉書：h",
+            "actions": [
+              {
+                "type": "uri",
+                "label": "Youtube連結",
+                "uri": "https://www.youtube.com/watch?v=KF8vFnhEHzE"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "template",
+      "altText": "今日放映電影2",
+      "template": {
+        "type": "carousel",
+        "columns": [
+          {
+            "title": "獅子王",
+            "thumbnailImageUrl": "https://i.ytimg.com/vi/MQuUkET0lQg/hqdefault.jpg",
+            "text": "1994 年迪士尼經典動畫長片《獅子王》真人版重現!! 【與森林共舞】億萬導演新作【獅子王】The Lion King ",
+            "actions": [
+              {
+                "type": "uri",
+                "label": "Youtube連結",
+                "uri": "https://www.youtube.com/watch?v=MQuUkET0lQg"
+              }
+            ]
+          },
+          {
+            "title": "蜘蛛人：離家日",
+            "thumbnailImageUrl": "https://i.ytimg.com/vi/6ytcJdQpvVE/hqdefault.jpg",
+            "text": "嚴重警告⚠️⚠️ ⚠️⚠️ ⚠️ ⚠️ 【蜘蛛人：離家日】最新預告雷很大沒看過《復仇者聯盟：終局之戰》千萬別看！ 真的先",
+            "actions": [
+              {
+                "type": "uri",
+                "label": "Youtube連結",
+                "uri": "https://www.youtube.com/watch?v=6ytcJdQpvVE"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "locationJSON": [
+    {
+      "type": "location",
+      "title": "新復珍戲院",
+      "address": "新竹市北區北門街6號",
+      "latitude": 24.804893,
+      "longitude": 120.966184
+    }
+  ]
+}
