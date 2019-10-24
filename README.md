@@ -18,7 +18,7 @@
   </tr>  
   <tr>
      <td>u123456789</td>
-     <td>['hc1','tp1']</td>
+     <td>["hc1"]</td>
   </tr>
 </table>
 
@@ -29,8 +29,16 @@
      <th>JSON</th>
   </tr>
   <tr>
-     <td>u123456789</td>
-     <td>['hc1','tp1']</td>
+     <td>hc1</td>
+     <td>`theaterJSON`</td>
+  </tr>
+  <tr>
+     <td>toPushTheaters</td>
+     <td>`toPushTheaters`</td>
+  </tr>
+  <tr>
+     <td>theaterListJSON</td>
+     <td>`theaterListJSON`</td>
   </tr>
 </table>
 
@@ -42,8 +50,16 @@
      <th>JSON</th>
   </tr>
   <tr>
-     <td>u123456789</td>
-     <td>['hc1','tp1']</td>
+     <td>theaters</td>
+     <td>`theatersConfig`</td>
+  </tr>
+  <tr>
+     <td>youtube</td>
+     <td>`tyoutubeConfig`</td>
+  </tr>
+  <tr>
+     <td>line</td>
+     <td>`lineConfig`</td>
   </tr>
 </table>
 
