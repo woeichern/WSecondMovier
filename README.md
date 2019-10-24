@@ -10,7 +10,7 @@
 
 資料庫共有個Sheet/Table, 分別是user、data、config。
 
-#### user
+#### `user`
 <table>
   <tr>
      <th>uid</th>
@@ -27,7 +27,7 @@
     + `uid` 為LINE 使用者uid，可透過`LINE Messaging API`取得。
     + `Subscriptions Theaters Array JSON` 為該`uid`使用者所訂閱的戲院鍵值陣列，如：`["hc1","tp1"]`。
 
-#### data
+#### `data`
 <table>
   <tr>
      <th>field</th>
@@ -61,7 +61,7 @@
         2.  To Push Theaters Array JSON : `data-topushtheaters.json`
         3.  Theaters List JSON: `data-theater-list.json`
 
-#### config
+#### `config`
 <table>
   <tr>
      <th>config</th>
