@@ -34,7 +34,7 @@
      <th>JSON</th>
   </tr>
   <tr>
-     <td>hc1</td>
+     <td><code>Theater Key</code</td>
      <td><code>Theater JSON</code></td>
   </tr>
   <tr>
@@ -53,7 +53,7 @@
 
 + **說明**
     + 此Sheet 為`主資料表`
-    + `Theater JSON` 為該對應戲院之JSON。
+    + `Theater JSON` 為`Theater Key`對應之戲院之JSON。
     + `To Push Theaters Array JSON` 為需發更新通知之戲院代號陣列JSON。
     + `Theaters List JSON`為戲院清單JSON。
     + 範例檔案
@@ -91,9 +91,11 @@
         2.  Youtube Dat API Config JSON : `config-youtube.json`
         3.  LINE API Config JSON: `config-line.json`
 
+前所提及之JSON，皆以最小化儲存於Google Sheet內。
+
 ## 前端
 
-使用LINE官方帳號作為本服務使用者端
+使用LINE官方帳號作為本服務使用者端。
 
 ## 串接外部API
 
