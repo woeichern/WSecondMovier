@@ -13,24 +13,24 @@
 + #### user
 <table>
   <tr>
-     <th>uid<th>
-     <th>subscriptions<th>
+     <th>uid</th>
+     <th>subscriptions</th>
   </tr>  
   <tr>
-     <td>u123456789<td>
-     <td>['hc1','tp1']<td>
+     <td>u123456789</td>
+     <td>['hc1','tp1']</td>
   </tr>
 </table>
 
 + #### data
 <table>
   <tr>
-     <th>field<th>
-     <th>JSON<th>
+     <th>field</th>
+     <th>JSON</th>
   </tr>
   <tr>
-     <td>u123456789<td>
-     <td>['hc1','tp1']<td>
+     <td>u123456789</td>
+     <td>['hc1','tp1']</td>
   </tr>
 </table>
 
@@ -38,12 +38,12 @@
 + #### config
 <table>
   <tr>
-     <th>config<th>
-     <th>JSON<th>
+     <th>config</th>
+     <th>JSON</th>
   </tr>
   <tr>
-     <td>u123456789<td>
-     <td>['hc1','tp1']<td>
+     <td>u123456789</td>
+     <td>['hc1','tp1']</td>
   </tr>
 </table>
 
