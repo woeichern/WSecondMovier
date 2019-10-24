@@ -1,0 +1,8 @@
+{
+  "ChannelAccessToken": "{YOUR_LINE_CHANNEL_ACCESS_TOKEN}",
+  "API": {
+    "Reply": "https://api.line.me/v2/bot/message/reply",
+    "Push": "https://api.line.me/v2/bot/message/push",
+    "Multicast": "https://api.line.me/v2/bot/message/multicast"
+  }
+}
