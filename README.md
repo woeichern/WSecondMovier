@@ -18,7 +18,7 @@
   </tr>  
   <tr>
      <td>u123456789</td>
-     <td>["hc1"]</td>
+     <td><code>Subscriptions Theaters Array JSON</code></td>
   </tr>
 </table>
 
@@ -30,15 +30,15 @@
   </tr>
   <tr>
      <td>hc1</td>
-     <td>`theaterJSON`</td>
+     <td><code>Theater JSON</code></td>
   </tr>
   <tr>
      <td>toPushTheaters</td>
-     <td>`toPushTheaters`</td>
+     <td><code>To Push Theaters Array JSON</code></td>
   </tr>
   <tr>
      <td>theaterListJSON</td>
-     <td>`theaterListJSON`</td>
+     <td><code>Theaters List JSON</code></td>
   </tr>
 </table>
 
@@ -51,15 +51,15 @@
   </tr>
   <tr>
      <td>theaters</td>
-     <td>`theatersConfig`</td>
+     <td><code>Theaters Config JSON</code></td>
   </tr>
   <tr>
      <td>youtube</td>
-     <td>`tyoutubeConfig`</td>
+     <td><code>Youtube Dat API Config JSON</code></td>
   </tr>
   <tr>
      <td>line</td>
-     <td>`lineConfig`</td>
+     <td><code>LINE API Config JSON</code></td>
   </tr>
 </table>
 
