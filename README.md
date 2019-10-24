@@ -97,6 +97,11 @@
 
 使用LINE官方帳號作為本服務使用者端。
 
+## Google API Key & LINE Channel Access Token
+
++ LINE Config 中的`ChannelAccessToken`屬性，請填入從LINE Developer後台所取得的LINE Channel Access Token。
++ Youtube Config 中的`Key`屬性，請填入從Google Developers Console所取得的 API 金鑰。 
+
 ## 串接外部API
 
 [Google Youtube Data API](https://developers.google.com/youtube/v3)
