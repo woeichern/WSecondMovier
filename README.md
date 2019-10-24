@@ -10,7 +10,7 @@
 
 資料庫共有個Sheet/Table, 分別是user、data、config。
 
-+ user
+#### user
 <table>
   <tr>
      <th>uid</th>
@@ -22,7 +22,12 @@
   </tr>
 </table>
 
-+ data
++ **說明**
+    + 此Sheet 為`使用者資料表`。
+    + `uid` 為LINE 使用者uid，可透過`LINE Messaging API`取得。
+    + `Subscriptions Theaters Array JSON` 為該`uid`使用者所訂閱的戲院鍵值陣列，如：`["hc1","tp1"]`。
+
+#### data
 <table>
   <tr>
      <th>field</th>
@@ -31,6 +36,10 @@
   <tr>
      <td>hc1</td>
      <td><code>Theater JSON</code></td>
+  </tr>
+  <tr>
+     <td>...</td>
+     <td>...</td>
   </tr>
   <tr>
      <td>toPushTheaters</td>
@@ -42,8 +51,17 @@
   </tr>
 </table>
 
++ **說明**
+    + 此Sheet 為`主資料表`
+    + `Theater JSON` 為該對應戲院之JSON。
+    + `To Push Theaters Array JSON` 為需發更新通知之戲院代號陣列JSON。
+    + `Theaters List JSON`為戲院清單JSON。
+    + 範例檔案
+        1.  Theater JSON : `data-theater.json`
+        2.  To Push Theaters Array JSON : `data-topushtheaters.json`
+        3.  Theaters List JSON: `data-theater-list.json`
 
-+ config
+#### config
 <table>
   <tr>
      <th>config</th>
@@ -62,6 +80,16 @@
      <td><code>LINE API Config JSON</code></td>
   </tr>
 </table>
+
++ **說明**
+    + 此Sheet 為`組態資料表`
+    + `Theaters Config JSON` 為該對應戲院之JSON。
+    + `Youtube Dat API Config JSON` 為需發更新通知之戲院代號陣列JSON。
+    + `LINE API Config JSON`為戲院清單JSON。
+    + 範例檔案
+        1.  Theaters Config JSON : `config-theater.json`
+        2.  Youtube Dat API Config JSON : `config-youtube.json`
+        3.  LINE API Config JSON: `config-line.json`
 
 ## 前端
 
