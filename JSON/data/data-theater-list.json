@@ -1,0 +1,32 @@
+[
+  {
+    "type": "template",
+    "altText": "北部二輪電影院",
+    "template": {
+      "type": "carousel",
+      "columns": [
+        {
+          "title": "新復珍戲院",
+          "text": "地址：新竹市北區北門街6號\n電話：(03)524-8285\n",
+          "actions": [
+            {
+              "type": "message",
+              "label": "查詢時刻表",
+              "text": "showtimes;hc1"
+            },
+            {
+              "type": "message",
+              "label": "戲院位置",
+              "text": "location;hc1"
+            },
+            {
+              "type": "message",
+              "label": "放映電影",
+              "text": "movies;hc1"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
