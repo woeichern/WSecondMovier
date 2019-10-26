@@ -63,7 +63,35 @@ function getTimeString(){
 //  -------------------------------------- Crawler Functions --------------------------------------
 
 // To parse request response content to xml object
-function xmlPreprocess(xml){
+function xmlPreprocess(xmlInput){
+
+    //Remove img tag
+    var xml = xmlInput;
+
+    var beginImg = xml.search("<img");
+
+    while(beginImg > -1){
+
+        search1 = xml.substr(beginImg).search(">");
+        search2 = xml.substr(beginImg).search("/>");
+
+        var lengthImg = search1+1;
+
+        if(search1 === search2 +1){
+
+            lengthImg = search2+2;
+
+        }
+
+        Logger.log("beginImg=" + beginImg + ", lengthImg=" + lengthImg + ", " + "search1="+search1 +", "+"search2="+search2);
+
+        xml = xml.replace(xml.substr(beginImg).substr(0, lengthImg), "");
+
+        //Logger.log(xml);
+
+        beginImg = xml.search("<img");
+
+    }
 
     return xml.replace(/<hr width=90%>/g, '')
             .replace(/ async /g, ' async="async" ')
@@ -92,6 +120,7 @@ function xmlPreprocess(xml){
             .replace(/ hspace=2 vspace=0 align=absmiddle>/g, ' hspace="2" vspace="0" align="absmiddle"/> ')
             .replace(/ hspace=0 align=absmiddle/g, ' hspace="2" align="absmiddle"')
             .replace(/ method=post /g, ' method="post" ')
+            .replace(/<img*>/g, '<img/>')
             .replace(/ target=_blank>/g, ' target="_blank">');
 
 }
@@ -129,6 +158,8 @@ function setJSON() {
         responseText = "<root>" + responseText.substring(start, end) + "</root>";
 
         xml = xmlPreprocess(responseText);
+
+        Logger.log(xml);
 
         var document = XmlService.parse(xml);
         var root = document.getRootElement();
@@ -285,8 +316,6 @@ function setJSON() {
 
     }
 
-    //trailerData = {"名偵探柯南：紺青之拳":{"Trailer":{"URL":"https://www.youtube.com/watch?v=pyaJVNd3Ons","Thumbnails":"https://i.ytimg.com/vi/pyaJVNd3Ons/hqdefault.jpg","Description":"改編自日本漫畫家青山剛昌推理漫畫系列，名偵探柯南於平成時代所上映的最後一部劇場版【名偵探柯南23：紺青之拳】Detective Conan 23:The Fist of..."}},"獅子王":{"Trailer":{"URL":"https://www.youtube.com/watch?v=MQuUkET0lQg","Thumbnails":"https://i.ytimg.com/vi/MQuUkET0lQg/hqdefault.jpg","Description":"1994 年迪士尼經典動畫長片《獅子王》真人版重現!! 【與森林共舞】億萬導演新作【獅子王】The Lion King 完整電影情報→ https://www.truemovie.com/2019moviedata..."}},"玩具總動員4":{"Trailer":{"URL":"https://www.youtube.com/watch?v=RA-11WlGGkE","Thumbnails":"https://i.ytimg.com/vi/RA-11WlGGkE/hqdefault.jpg","Description":"迪士尼影業粉絲頁: https:/www.facebook.com/disneymoviesTaiwan 迪士尼影業官方YouTube 頻道: https://www.youtube.com/user/disneymoviestw."}},"蜘蛛人：離家日":{"Trailer":{"URL":"https://www.youtube.com/watch?v=6ytcJdQpvVE","Thumbnails":"https://i.ytimg.com/vi/6ytcJdQpvVE/hqdefault.jpg","Description":"嚴重警告⚠️⚠️ ⚠️⚠️ ⚠️ ⚠️ 【蜘蛛人：離家日】最新預告雷很大沒看過《復仇者聯盟：終局之戰》千萬別看！ 真的先不要！彼..."}},"電流大戰":{"Trailer":{"URL":"https://www.youtube.com/watch?v=KF8vFnhEHzE","Thumbnails":"https://i.ytimg.com/vi/KF8vFnhEHzE/hqdefault.jpg","Description":"官網：http://theatrical.catchplay.com/Movies/thecurrentwar 臉書：https://www.facebook.com/catchplay/ 預售 ..."}},"從前，有個好萊塢":{"Trailer":{"URL":"https://www.youtube.com/watch?v=AEjLxmmYBGc","Thumbnails":"https://i.ytimg.com/vi/AEjLxmmYBGc/hqdefault.jpg","Description":"金獎名導\"昆丁塔倫提諾\"從影第9部作品! 李奧納多狄卡皮歐、瑪格羅比繼【華爾街之狼】後再度合作! 布萊德彼特、達柯塔芬妮、艾爾帕西諾、艾米里..."}},"懸案判決":{"Trailer":{"URL":"https://www.youtube.com/watch?v=t6Sxac9LTqw","Thumbnails":"https://i.ytimg.com/vi/t6Sxac9LTqw/hqdefault.jpg","Description":"8.9 找出真相【法國知名導演自編自導首部劇情長片】 【改編真實刑事懸案口碑延燒法國票房破億法庭攻防之作】 〈坎城影帝〉#奧利維古賀梅..."}},"我出去透透氣":{"Trailer":{"URL":"https://www.youtube.com/watch?v=Pv_VGTO3RXU","Thumbnails":"https://i.ytimg.com/vi/Pv_VGTO3RXU/hqdefault.jpg","Description":"我出去透透氣】電影介紹： http://garageplay.tw/1697 上映日期：2019.08.02 ☆ 《#何處是我家》奧斯卡金像獎得主卡洛琳林克最新作品☆ 超過350萬人淚眼..."}},"痛苦與榮耀":{"Trailer":{"URL":"https://www.youtube.com/watch?v=wYJzE-Syezg","Thumbnails":"https://i.ytimg.com/vi/wYJzE-Syezg/hqdefault.jpg","Description":"坎城影展最佳導演\"阿莫多瓦\"最新力作，繼【慾望法則】、【壞教慾】後橫跨32年時間完成「導演三部曲」最終章! \"安東尼奧班德拉斯\"憑本片榮登坎城..."}},"乘浪之約":{"Trailer":{"URL":"https://www.youtube.com/watch?v=fz9bHT6Ci9c","Thumbnails":"https://i.ytimg.com/vi/fz9bHT6Ci9c/hqdefault.jpg","Description":"今年最沁涼浪漫的夏日戀曲日本動畫鬼才湯淺政明最新力作 繼《你的名字》後最浪漫療癒的動畫電影 故事描述為了去大學念書..."}},"使徒行者2：諜影行動":{"Trailer":{"URL":"https://www.youtube.com/watch?v=bF4gEHaX-Ew","Thumbnails":"https://i.ytimg.com/vi/bF4gEHaX-Ew/hqdefault.jpg","Description":"三大影帝再度合作聯手調查潛伏臥底再次呈現別樹一格的「使徒」精神堅定的守護正義而不惜付出一切8月8日隆重獻映  三⼤影帝再度合作..."}},"在黑暗中說的鬼故事":{"Trailer":{"URL":"https://www.youtube.com/watch?v=18-YA7TtfR0","Thumbnails":"https://i.ytimg.com/vi/18-YA7TtfR0/hqdefault.jpg","Description":"羊男的迷宮、水底情深金獎大導演\"吉勒摩戴托羅\"監製，驗屍官好評導演最新力作【在黑暗中說的鬼故事】Scary Stories to Tell in the Dark 完整電影情報→..."}},"殺手寓言":{"Trailer":{"URL":"https://www.youtube.com/watch?v=eQZ0u4yed7Y","Thumbnails":"https://i.ytimg.com/vi/eQZ0u4yed7Y/hqdefault.jpg","Description":"加入官方IG：https://bit.ly/2Oy78Sf ☆ 加入官方FB：https://bit.ly/2pNZJ6H = ☆ 暢銷漫畫改編，榮登日本首週新片票房冠軍，勇破百萬觀影人次！ ☆..."}},"絕世名伶":{"Trailer":{"URL":"https://www.youtube.com/watch?v=aRiVUkjyXkE","Thumbnails":"https://i.ytimg.com/vi/aRiVUkjyXkE/hqdefault.jpg","Description":"末代沙皇真實故事，夏宮、馬林斯基劇院、莫斯科大劇院實景拍攝 世界三大芭蕾舞團的馬林斯基劇院芭蕾舞團備受爭議的芭蕾名伶 世界..."}},"阿拉丁":{"Trailer":{"URL":"https://www.youtube.com/watch?v=1Cj4z4PiUCc","Thumbnails":"https://i.ytimg.com/vi/1Cj4z4PiUCc/hqdefault.jpg","Description":"迪士尼影業粉絲頁: https:/www.facebook.com/disneymoviesTaiwan 迪士尼影業官方YouTube 頻道: https://www.youtube.com/user/disneymoviestw."}},"深夜加油站遇見抓狂衰事":{"Trailer":{"URL":"https://www.youtube.com/watch?v=QM0w2iXn5jg","Thumbnails":"https://i.ytimg.com/vi/QM0w2iXn5jg/hqdefault.jpg","Description":"新銳華裔導演作品，荒誕幽默笑點獲得全場觀眾熱烈反應☆ 人氣新秀演員蘇琪沃特豪斯、岑勇康Harry Shum Jr. 不計形象，放膽演出☆ 角色有趣，劇..."}},"緝魔":{"Trailer":{"URL":"https://www.youtube.com/watch?v=Fn7jYM7pNfo","Thumbnails":"https://i.ytimg.com/vi/Fn7jYM7pNfo/hqdefault.jpg","Description":"2019年最讓人不寒而慄的超限制級驚悚台灣電影☆ 集合金獎卡司莊凱勛、邵雨薇、傅孟柏演技爆發，打造血腥懸疑之作☆ 整形美人慘遭斷頭棄屍..."}},"靈異乍現":{"Trailer":{"URL":"https://www.youtube.com/watch?v=N1osOk5ONWg","Thumbnails":"https://i.ytimg.com/vi/N1osOk5ONWg/hqdefault.jpg","Description":"超人降臨or 惡魔轉生？【星際異攻隊】億萬導演\"詹姆斯岡恩\"與團隊製作【靈異乍現】Brightburn 完整電影情報→ ..."}},"灼人秘密":{"Trailer":{"URL":"https://www.youtube.com/watch?v=IRerp4-S9VI","Thumbnails":"https://i.ytimg.com/vi/IRerp4-S9VI/hqdefault.jpg","Description":"你準備好了嗎揭開演藝圈最暗黑的秘密  坎城影展「一種注目」競賽單元、台北電影節開幕片  《再見瓦城》導演趙德胤顛覆華語片驚悚..."}},"懸案密碼 第64號":{"Trailer":{"URL":"https://www.youtube.com/watch?v=Wfx_IRCRb8U","Thumbnails":"https://i.ytimg.com/vi/Wfx_IRCRb8U/hqdefault.jpg","Description":"【龍紋身的女孩】製作團隊重金打造，全球銷售突破1500萬冊暢銷推理鉅作改編【懸案密碼4:第64號病歷】The Purity of Vengeance 完整電影情報→ https://www.tr..."}},"炫目之光":{"Trailer":{"URL":"https://www.youtube.com/watch?v=Bmg4mu4GJSo","Thumbnails":"https://i.ytimg.com/vi/Bmg4mu4GJSo/hqdefault.jpg","Description":"有沒有一首歌、一位偶像深深的改變了你？ 【炫目之光】一個被音樂啟發的真實故事✨ . 改編自英國作家薩費茲曼佐廣受好評的回憶錄，他在「人生..."}},"電影哆啦A夢：大雄的月球探測記":{"Trailer":{"URL":"https://www.youtube.com/watch?v=ei3EMgcq00A","Thumbnails":"https://i.ytimg.com/vi/ei3EMgcq00A/hqdefault.jpg","Description":"電影哆啦A夢：大雄的月球探測記】電影介紹： http://garageplay.tw/1614 Facebook粉絲頁：https://www.facebook.com/garageplay.tw 上映日期: 2019.07.26 信賴的 ..."}},"一首搖滾上月球":{"Trailer":{"URL":"https://www.youtube.com/watch?v=QnriSghHdyI","Thumbnails":"https://i.ytimg.com/vi/QnriSghHdyI/hqdefault.jpg","Description":"電影粉絲團：https://www.facebook.com/OTurnFilms 電影【一首搖滾上月球】X 熱血老爸樂團【睏熊霸】，2013年最真性情的搖滾樂章！ 監製：【翻滾吧阿信】林..."}},"錢不夠用２":{"Trailer":{"URL":"https://www.youtube.com/watch?v=sBUOChL-k24","Thumbnails":"https://i.ytimg.com/vi/sBUOChL-k24/hqdefault.jpg","Description":"何時你會考慮自己往生的價值？等老了？病了？還是到了生命交叉口、你尚有能力決定「自己生與死之價值」的時刻？這問題很玄？的確是大哉問！..."}},"王者天下":{"Trailer":{"URL":"https://www.youtube.com/watch?v=RQLKb5APH9g","Thumbnails":"https://i.ytimg.com/vi/RQLKb5APH9g/hqdefault.jpg","Description":"日本年度最大史詩製作，票房飆破50 億！ □ 山崎賢人、橋本環奈、吉澤亮、長澤雅美、大澤隆夫□ 絕不可能寫實化的作品，終於登上大銀幕！..."}},"復仇者聯盟4：終局之戰":{"Trailer":{"URL":"https://www.youtube.com/watch?v=ZrB7EdfPBJU","Thumbnails":"https://i.ytimg.com/vi/ZrB7EdfPBJU/hqdefault.jpg","Description":"不計一切代價，《復仇者聯盟：終局之戰》全新預告，電影4月24日(三)搶先上映。"}}};
-
     for(var theaterKey in configTheaters){
 
         var theaterJSON = getJSON(theaterKey);
@@ -390,17 +419,17 @@ function getSubscriptUserList(theaterKey){
 // To get movies' trailer data
 function getMovieTrailerData(title){
 
-    var response = UrlFetchApp.fetch(
-		YOUTUBE_DATA_API_SEARCH_URL + "&q=" + title + "+預告",
-		{ method: 'get' }
-    );
-
-    var responseJSON = JSON.parse(response.getContentText());
+    var responseJSON = YouTube.Search.list('id,snippet', {
+        q: title + "+預告",
+        type: "video",
+        videoCaption: "any",
+        maxResults: 1
+    });
 
     var returnJSON = {};
 
     returnJSON['urlVideo']      = YOUTUBE_ENDPOINT + responseJSON.items[0].id.videoId;
-    returnJSON['description']   = responseJSON.items[0]['snippet']['Description'];
+    returnJSON['description']   = responseJSON.items[0]['snippet']['description'];
     returnJSON['urlThumbnail']  = responseJSON.items[0]['snippet']['thumbnails']['high']['url'];
 
     return returnJSON;
